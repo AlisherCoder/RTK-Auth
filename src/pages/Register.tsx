@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux";
-import { Button, Form, FormProps, Input, Typography, Select } from "antd";
+import { Button, Form, FormProps, Input, Typography, Select, Upload } from "antd";
 import { useGetRegionsQuery } from "../redux/api/region.api";
 import { useRegisterMutation } from "../redux/api/auth.api";
 import { useNavigate } from "react-router-dom";
+import { UploadOutlined } from "@ant-design/icons";
+import axios from "axios";
 const { Title } = Typography;
 
 type FieldType = {
@@ -27,14 +29,30 @@ const Register = () => {
    const { data } = useGetRegionsQuery({});
    const [register, { isLoading }] = useRegisterMutation();
    const options = data?.data?.map((item: Region) => ({ value: item.id, label: item.name }));
+   const [image, setImage] = useState("");
 
    const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-      values.img = "https://example.jpg";
+      values.img = image;
       register(values)
          .unwrap()
          .then(() => {
             navigate("/login");
          });
+   };
+
+   const uploadImage = async (options: any) => {
+      const { onSuccess, onError, file } = options;
+
+      const fmData = new FormData();
+      fmData.append("file", file);
+
+      axios
+         .post("https://keldibekov.online/upload", fmData)
+         .then((res) => {
+            onSuccess("ok");
+            setImage(res.data?.fileUrl);
+         })
+         .catch((err) => onError(err));
    };
 
    return (
@@ -51,6 +69,21 @@ const Register = () => {
                autoComplete='off'
                layout='vertical'
             >
+               <Form.Item<FieldType>
+                  label='Image'
+                  name='img'
+                  rules={[{ required: true, message: "Please input your image!" }]}
+               >
+                  <Upload
+                     // action='https://keldibekov.online/upload'
+                     customRequest={uploadImage}
+                     listType='picture'
+                     maxCount={1}
+                  >
+                     <Button icon={<UploadOutlined />}>Upload</Button>
+                  </Upload>
+               </Form.Item>
+
                <Form.Item<FieldType>
                   label='First name'
                   name='firstname'

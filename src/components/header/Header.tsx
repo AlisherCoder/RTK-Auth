@@ -27,6 +27,14 @@ const pages = [
       name: "Register",
       link: "/otp",
    },
+   {
+      name: "Login",
+      link: "/login",
+   },
+   {
+      name: "Statistic",
+      link: "/chart",
+   },
 ];
 const settings = [{ name: "Profile", link: "/profile" }];
 
@@ -140,7 +148,7 @@ const ResponsiveAppBar = () => {
                <Box sx={{ flexGrow: 0 }}>
                   <Tooltip title='Open settings'>
                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+                        <Avatar alt='Remy Sharp' src='' />
                      </IconButton>
                   </Tooltip>
                   <Menu

@@ -6,7 +6,7 @@ export const mainApi = createApi({
       baseUrl: "https://keldibekov.online",
       prepareHeaders: (headers) => {
          const auth = JSON.parse(localStorage.getItem("auth-token") || "{}");
-         console.log(auth);
+
          const token = auth?.token || null;
          if (token) {
             headers.set("Authorization", `Bearer ${token}`);

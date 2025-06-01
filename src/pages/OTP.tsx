@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import type { FormProps } from "antd";
-import { Button, Form, Input, Typography } from "antd";
+import { Button, Form, Input, message, Typography } from "antd";
 import type { GetProps } from "antd";
 import { useSendOtpMutation, useVerifyOtpMutation } from "../redux/api/auth.api";
 import { useDispatch } from "react-redux";
@@ -87,21 +87,38 @@ export const EmailSender: React.FC<EmailSenderProps> = ({ setEmail, isLoading })
 const OTP = () => {
    const [email, setEmail] = useState("");
    const [sendEmail, { isSuccess, isLoading }] = useSendOtpMutation();
+   const [messageApi, contextHolder] = message.useMessage();
+
+   const error = (message: string) => {
+      console.log(message);
+      messageApi.open({
+         type: "error",
+         content: message,
+      });
+   };
 
    useEffect(() => {
       if (email) {
-         sendEmail({ email });
+         sendEmail({ email })
+            .unwrap()
+            .then()
+            .catch((err) => {
+               error(err.data?.message);
+            });
       }
    }, [email]);
 
    return (
-      <div className='w-full h-screen flex items-center justify-center'>
-         {isSuccess ? (
-            <VerifyOTP email={email} />
-         ) : (
-            <EmailSender setEmail={setEmail} isLoading={isLoading} />
-         )}
-      </div>
+      <>
+         {contextHolder}
+         <div className='w-full h-screen flex items-center justify-center'>
+            {isSuccess ? (
+               <VerifyOTP email={email} />
+            ) : (
+               <EmailSender setEmail={setEmail} isLoading={isLoading} />
+            )}
+         </div>
+      </>
    );
 };
 

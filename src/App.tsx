@@ -7,6 +7,7 @@ const OTP = lazy(() => import("./pages/OTP"));
 const Register = lazy(() => import("./pages/Register"));
 const Profil = lazy(() => import("./pages/Profil"));
 const About = lazy(() => import("./pages/About"));
+const Chart = lazy(() => import("./pages/Chart"));
 
 const App = () => {
    return (
@@ -20,8 +21,9 @@ const App = () => {
             { path: "/login", element: <Login /> },
             { path: "/register", element: <Register /> },
             { path: "/otp", element: <OTP /> },
-            { path: "/profil", element: <Profil /> },
+            { path: "/profile", element: <Profil /> },
             { path: "/about", element: <About /> },
+            { path: "/chart", element: <Chart /> },
          ])}
       </>
    );
